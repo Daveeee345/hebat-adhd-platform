@@ -1,0 +1,19 @@
+import { useEffect, useState } from 'react';
+import { Activity, Clock3, History, ShieldCheck, UserRound } from 'lucide-react';
+import { authApi } from '../lib/hebatApi';
+import { useHebatData } from '../lib/HebatDataContext';
+import { useLanguage } from '../lib/LanguageContext';
+
+export default function AccountHistory(){
+  const {data} = useHebatData(); const {language}=useLanguage(); const isId=language==='id';
+  const [own,setOwn]=useState<any[]>([]);
+  useEffect(()=>{authApi.history().then(r=>setOwn([...(r.events||[]),...(r.audit||[]).map((x:any)=>({...x,type:x.action||'ACCOUNT_ACTION'}))].sort((a:any,b:any)=>String(b.createdAt).localeCompare(String(a.createdAt))))).catch(()=>setOwn([]));},[]);
+  if(!data) return <div className="p-8 font-black">Loading…</div>;
+  return <div className="max-w-5xl mx-auto p-5 md:p-8 lg:p-10 space-y-7">
+    <header><div className="text-[10px] uppercase font-black tracking-[0.2em] text-primary">{isId?'Akun & Riwayat':'Account & History'}</div><h1 className="text-3xl md:text-4xl font-black mt-1">{data.account.name}</h1><p className="font-bold text-neutral-500 mt-2">{data.account.email} · {data.account.role}</p></header>
+    <section className="grid md:grid-cols-3 gap-4"><Info icon={<UserRound/>} label={isId?'Profil aktif':'Active profile'} value={data.child.name}/><Info icon={<History/>} label={isId?'Aktivitas tersimpan':'Saved child events'} value={String(data.eventHistory.length)}/><Info icon={<ShieldCheck/>} label={isId?'Kode koneksi':'Connection code'} value={data.child.inviteCode || '—'}/></section>
+    <section className="card-pillowy"><div className="flex items-center gap-3"><Activity className="w-5 h-5 text-primary"/><div><div className="text-[10px] uppercase font-black tracking-widest text-neutral-400">{isId?'Riwayat profil anak':'Child profile timeline'}</div><h2 className="text-xl font-black">{data.child.name}</h2></div></div><div className="mt-5 divide-y divide-surface-variant">{data.eventHistory.slice(0,30).map((e:any)=><div key={`${e.type}-${e.id}`} className="py-4 flex items-start gap-4"><div className="w-9 h-9 rounded-xl bg-primary-container text-primary flex items-center justify-center shrink-0"><Clock3 className="w-4 h-4"/></div><div className="flex-1"><div className="font-black">{e.title}</div><div className="text-sm font-bold text-neutral-500 mt-0.5">{e.detail}</div><div className="text-xs font-bold text-neutral-400 mt-1">{e.actorName?`${e.actorName} · `:''}{new Date(e.createdAt).toLocaleString()}</div></div></div>)}{!data.eventHistory.length&&<div className="py-8 text-center text-neutral-400 font-bold">{isId?'Belum ada riwayat.':'No history yet.'}</div>}</div></section>
+    <section className="card-pillowy"><div className="text-[10px] uppercase font-black tracking-widest text-neutral-400">{isId?'Aktivitas akun ini':'This account activity'}</div><h2 className="text-xl font-black mt-1">{isId?'Apa yang dilakukan akun ini':'Actions performed by this account'}</h2><div className="mt-4 space-y-2">{own.slice(0,20).map((e:any)=><div key={e.id} className="rounded-2xl border border-surface-variant p-4 flex justify-between gap-4"><div className="font-black text-sm">{String(e.type).replaceAll('_',' ')}</div><div className="text-xs font-bold text-neutral-400">{new Date(e.createdAt).toLocaleString()}</div></div>)}{!own.length&&<p className="text-sm font-bold text-neutral-400">{isId?'Aktivitas baru akan muncul setelah akun digunakan.':'New account activity will appear as this account is used.'}</p>}</div></section>
+  </div>
+}
+function Info({icon,label,value}:{icon:any;label:string;value:string}){return <div className="card-pillowy !p-5"><div className="w-9 h-9 rounded-xl bg-secondary-container text-secondary-dark flex items-center justify-center">{icon}</div><div className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mt-3">{label}</div><div className="font-black mt-1 break-all">{value}</div></div>}

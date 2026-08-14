@@ -1,0 +1,14 @@
+{
+  "name": "HEBAT 2.0 Account Backend",
+  "description": "A closed-loop, non-diagnostic ADHD learning and support platform with account-based login, linked child profiles, persistent history, role-aware dashboards, and an explainable support engine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "ACCOUNT_AUTHENTICATION",
+    "ACCOUNT_SCOPED_HISTORY",
+    "MULTI_CHILD_LINKING",
+    "ROLE_BASED_DASHBOARDS",
+    "FULL_STACK_SUPPORT_LOOP",
+    "EXPLAINABLE_RULE_ENGINE",
+    "CONSENT_AWARE_PROFESSIONAL_ACCESS"
+  ]
+}

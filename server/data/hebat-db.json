@@ -1,0 +1,562 @@
+{
+  "version": 4,
+  "users": [
+    {
+      "id": "user-leo",
+      "email": "student@hebat.demo",
+      "name": "Leo Pratama",
+      "role": "child",
+      "passwordSalt": "0c756a0f4baa13ddeb69c8f9c14a6e0a",
+      "passwordHash": "05785480145127a77651e97af509a7a7140734778a7a7a59948e22e5316815c4421b8649fa3d3a0e4985e4cead920fd7d6f177fe8717e5b4b643426c3b289bf4",
+      "createdAt": "2026-07-16T01:00:00.000Z",
+      "profileComplete": true
+    },
+    {
+      "id": "user-maya",
+      "email": "parent@hebat.demo",
+      "name": "Maya Pratama",
+      "role": "parent",
+      "passwordSalt": "53a207b3e66bee91076ac691288e21d5",
+      "passwordHash": "fe0cc1c128261d40a6c24d394129a52dcbf56f80dc82c6bb166f45dc0dbd104e5cae27d06c3568ee6d9ef1bfb83bc19c8c7227de04e6436624e228a152945584",
+      "createdAt": "2026-07-16T01:00:00.000Z",
+      "profileComplete": true
+    },
+    {
+      "id": "user-ratna",
+      "email": "teacher@hebat.demo",
+      "name": "Ibu Ratna",
+      "role": "teacher",
+      "passwordSalt": "b38ea6043e5c9efff686763f384c2284",
+      "passwordHash": "8fd93b38b81e16d1094bcf5fca434851df4c6b67ec85646357508a98caa233a21e3d920ea57b40103879ee6eb9fa090e19acd1387263c6846071dedfbfe81cb8",
+      "createdAt": "2026-07-16T01:00:00.000Z",
+      "profileComplete": true
+    },
+    {
+      "id": "user-sarah",
+      "email": "professional@hebat.demo",
+      "name": "Dr. Sarah Jenkins",
+      "role": "professional",
+      "passwordSalt": "9a295dc6f942d515e89464f91dc9e9a9",
+      "passwordHash": "01154cb650cc46c3d3c670ee54720c067e706795528da5f12282f5fd55dd4dcec96bcf11e308b4c2b91ca26e40c70a0641be7482e5dfeac691e4b4d48fa96c81",
+      "createdAt": "2026-07-16T01:00:00.000Z",
+      "profileComplete": true
+    }
+  ],
+  "sessions": [
+    {
+      "id": "session-386cd636-10a5-4ddb-8a21-72a940badceb",
+      "userId": "user-leo",
+      "tokenHash": "2021116f48d590736d9274958c98334c9726ad5a16655b9a3925f4d680b26543",
+      "createdAt": "2026-08-14T16:00:06.930Z",
+      "lastSeenAt": "2026-08-14T16:28:42.718Z",
+      "expiresAt": "2026-08-21T16:00:06.930Z"
+    },
+    {
+      "id": "session-f003ff7d-cd3a-4ffd-98e8-9e84dd1ef573",
+      "userId": "user-leo",
+      "tokenHash": "2de459998749555a10cc9d8d78eaef38466553aa3762c89fcc10b3c492879192",
+      "createdAt": "2026-08-14T17:16:10.376Z",
+      "lastSeenAt": "2026-08-14T17:17:10.515Z",
+      "expiresAt": "2026-08-21T17:16:10.378Z"
+    }
+  ],
+  "userChildLinks": [
+    {
+      "id": "link-leo-self",
+      "userId": "user-leo",
+      "childId": "leo-1",
+      "relationship": "self",
+      "createdAt": "2026-07-16T01:00:00.000Z"
+    },
+    {
+      "id": "link-leo-parent",
+      "userId": "user-maya",
+      "childId": "leo-1",
+      "relationship": "parent",
+      "createdAt": "2026-07-16T01:00:00.000Z"
+    },
+    {
+      "id": "link-leo-teacher",
+      "userId": "user-ratna",
+      "childId": "leo-1",
+      "relationship": "teacher",
+      "createdAt": "2026-07-16T01:00:00.000Z"
+    },
+    {
+      "id": "link-leo-pro",
+      "userId": "user-sarah",
+      "childId": "leo-1",
+      "relationship": "professional",
+      "createdAt": "2026-08-03T01:00:00.000Z"
+    }
+  ],
+  "children": [
+    {
+      "id": "leo-1",
+      "name": "Leo Pratama",
+      "age": 9,
+      "grade": "Grade 4",
+      "school": "SD Nusantara Bangsa",
+      "avatar": "🦁",
+      "inviteCode": "LEO2026A",
+      "strengths": [
+        "Visual creativity",
+        "Empathy with peers",
+        "Hands-on problem solving"
+      ],
+      "createdAt": "2026-07-16T01:00:00.000Z"
+    }
+  ],
+  "observations": [
+    {
+      "id": "obs-1",
+      "childId": "leo-1",
+      "actorUserId": "user-ratna",
+      "authorRole": "teacher",
+      "authorName": "Ibu Ratna",
+      "createdAt": "2026-08-15T02:00:00.000Z",
+      "attention": "some",
+      "taskCompletion": "partial",
+      "promptLevel": "one_two",
+      "transition": "prompt",
+      "note": "Completed reading after the worksheet was split into three steps."
+    },
+    {
+      "id": "obs-2",
+      "childId": "leo-1",
+      "actorUserId": "user-maya",
+      "authorRole": "parent",
+      "authorName": "Maya Pratama",
+      "createdAt": "2026-08-14T11:00:00.000Z",
+      "attention": "some",
+      "taskCompletion": "partial",
+      "promptLevel": "one_two",
+      "transition": "smooth",
+      "note": "Homework was easier after using the visual three-step routine."
+    },
+    {
+      "id": "obs-3",
+      "childId": "leo-1",
+      "actorUserId": "user-ratna",
+      "authorRole": "teacher",
+      "authorName": "Ibu Ratna",
+      "createdAt": "2026-08-13T03:00:00.000Z",
+      "attention": "some",
+      "taskCompletion": "not_completed",
+      "promptLevel": "frequent",
+      "transition": "prompt",
+      "note": "Long math worksheet needed repeated redirection."
+    },
+    {
+      "id": "obs-4",
+      "childId": "leo-1",
+      "actorUserId": "user-ratna",
+      "authorRole": "teacher",
+      "authorName": "Ibu Ratna",
+      "createdAt": "2026-08-11T01:00:00.000Z",
+      "attention": "some",
+      "taskCompletion": "completed",
+      "promptLevel": "one_two",
+      "transition": "smooth",
+      "note": "Short task card worked well."
+    }
+  ],
+  "focusSessions": [
+    {
+      "id": "focus-1",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T09:00:00.000Z",
+      "assignedMinutes": 7,
+      "completedMinutes": 7,
+      "completed": true
+    },
+    {
+      "id": "focus-2",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-13T09:00:00.000Z",
+      "assignedMinutes": 7,
+      "completedMinutes": 7,
+      "completed": true
+    },
+    {
+      "id": "focus-3",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-12T09:00:00.000Z",
+      "assignedMinutes": 6,
+      "completedMinutes": 6,
+      "completed": true
+    },
+    {
+      "id": "focus-4",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-10T09:00:00.000Z",
+      "assignedMinutes": 7,
+      "completedMinutes": 5,
+      "completed": false
+    }
+  ],
+  "routineSessions": [
+    {
+      "id": "routine-244bfe19-c884-4821-bff4-f8c4a7f4c2be",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T17:17:05.655Z",
+      "routineId": "homework",
+      "completedSteps": 1,
+      "totalSteps": 3
+    },
+    {
+      "id": "routine-67a7cb39-108f-490b-8a60-b22f5c913b1b",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T16:28:42.727Z",
+      "routineId": "homework",
+      "completedSteps": 3,
+      "totalSteps": 3
+    },
+    {
+      "id": "routine-1",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-15T10:00:00.000Z",
+      "routineId": "homework",
+      "completedSteps": 2,
+      "totalSteps": 3
+    },
+    {
+      "id": "routine-2",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T10:00:00.000Z",
+      "routineId": "homework",
+      "completedSteps": 3,
+      "totalSteps": 3
+    },
+    {
+      "id": "routine-3",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-13T10:00:00.000Z",
+      "routineId": "homework",
+      "completedSteps": 3,
+      "totalSteps": 3
+    },
+    {
+      "id": "routine-4",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-12T10:00:00.000Z",
+      "routineId": "homework",
+      "completedSteps": 2,
+      "totalSteps": 3
+    },
+    {
+      "id": "routine-5",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-11T10:00:00.000Z",
+      "routineId": "homework",
+      "completedSteps": 3,
+      "totalSteps": 3
+    }
+  ],
+  "moodCheckins": [
+    {
+      "id": "mood-2ac5a1f0-45c2-4f15-8768-fb5de79807af",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T16:00:16.239Z",
+      "mood": "tired"
+    },
+    {
+      "id": "mood-1",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-15T00:00:00.000Z",
+      "mood": "okay"
+    }
+  ],
+  "screenings": [],
+  "rewardTransactions": [
+    {
+      "id": "reward-2bcaf696-558d-4b6c-aa2e-69b1ac179c3d",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T17:17:10.517Z",
+      "amount": -120,
+      "reason": "Redeemed Sky Theme"
+    },
+    {
+      "id": "reward-2cdb88c6-85ad-45ab-83dd-9c19236554c1",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T17:17:09.064Z",
+      "amount": -80,
+      "reason": "Redeemed Focus Builder Badge"
+    },
+    {
+      "id": "reward-89dd5d9e-71f4-4bae-82bd-86a728f8a5f1",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T17:17:08.247Z",
+      "amount": -80,
+      "reason": "Redeemed Focus Builder Badge"
+    },
+    {
+      "id": "reward-1fcca1bb-09dd-4660-83b5-830f3bca7741",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T16:28:42.727Z",
+      "amount": 15,
+      "reason": "Routine completed"
+    },
+    {
+      "id": "r-1",
+      "childId": "leo-1",
+      "actorUserId": "system",
+      "createdAt": "2026-08-07T01:00:00.000Z",
+      "amount": 200,
+      "reason": "Welcome Stars"
+    },
+    {
+      "id": "r-2",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-12T01:00:00.000Z",
+      "amount": 60,
+      "reason": "Learning missions"
+    },
+    {
+      "id": "r-3",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-13T01:00:00.000Z",
+      "amount": 40,
+      "reason": "Focus Sprints"
+    },
+    {
+      "id": "r-4",
+      "childId": "leo-1",
+      "actorUserId": "user-leo",
+      "createdAt": "2026-08-14T01:00:00.000Z",
+      "amount": 35,
+      "reason": "Routine completion"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg-1",
+      "childId": "leo-1",
+      "actorUserId": "user-ratna",
+      "createdAt": "2026-08-15T03:00:00.000Z",
+      "fromRole": "teacher",
+      "fromName": "Ibu Ratna",
+      "toRole": "parent",
+      "text": "Leo responded well when the math worksheet was split into three visible steps."
+    },
+    {
+      "id": "msg-2",
+      "childId": "leo-1",
+      "actorUserId": "user-maya",
+      "createdAt": "2026-08-14T12:00:00.000Z",
+      "fromRole": "parent",
+      "fromName": "Maya Pratama",
+      "toRole": "teacher",
+      "text": "We used the same three-step routine at home and homework went more smoothly."
+    }
+  ],
+  "referrals": [
+    {
+      "id": "ref-1",
+      "childId": "leo-1",
+      "actorUserId": "user-maya",
+      "createdAt": "2026-08-05T01:00:00.000Z",
+      "status": "monitoring",
+      "consent": true,
+      "reason": "Persistent attention and task-completion support needs across school and home.",
+      "professionalName": "Dr. Sarah Jenkins",
+      "professionalNote": "Continue coordinated support for two more weeks before deciding whether an in-person review is needed."
+    }
+  ],
+  "masteryTracks": [
+    {
+      "id": "track-focus-leo",
+      "childId": "leo-1",
+      "key": "focus",
+      "label": "Focus",
+      "stage": 3,
+      "maxStage": 5,
+      "progress": 62
+    },
+    {
+      "id": "track-task-leo",
+      "childId": "leo-1",
+      "key": "task",
+      "label": "Task Completion",
+      "stage": 3,
+      "maxStage": 5,
+      "progress": 70
+    },
+    {
+      "id": "track-memory-leo",
+      "childId": "leo-1",
+      "key": "memory",
+      "label": "Working Memory",
+      "stage": 2,
+      "maxStage": 5,
+      "progress": 45
+    },
+    {
+      "id": "track-routine-leo",
+      "childId": "leo-1",
+      "key": "routine",
+      "label": "Routine",
+      "stage": 4,
+      "maxStage": 5,
+      "progress": 78
+    },
+    {
+      "id": "track-reading-leo",
+      "childId": "leo-1",
+      "key": "reading",
+      "label": "Reading",
+      "stage": 4,
+      "maxStage": 5,
+      "progress": 82
+    },
+    {
+      "id": "track-math-leo",
+      "childId": "leo-1",
+      "key": "math",
+      "label": "Mathematics",
+      "stage": 3,
+      "maxStage": 5,
+      "progress": 65
+    }
+  ],
+  "missionCompletions": [
+    {
+      "id": "mc-warmup",
+      "childId": "leo-1",
+      "missionId": "mission-warmup",
+      "completedAt": "2026-08-13T01:00:00.000Z",
+      "actorUserId": "user-leo"
+    }
+  ],
+  "redeemedRewards": [
+    {
+      "id": "redeem-8a39e59c-a78f-4564-9443-499cf0b44691",
+      "childId": "leo-1",
+      "rewardId": "badge-focus",
+      "name": "Focus Builder Badge",
+      "cost": 80,
+      "redeemedAt": "2026-08-14T17:17:08.247Z",
+      "actorUserId": "user-leo"
+    },
+    {
+      "id": "redeem-3cee8364-1960-42fb-8a43-a99df7c2b86c",
+      "childId": "leo-1",
+      "rewardId": "badge-focus",
+      "name": "Focus Builder Badge",
+      "cost": 80,
+      "redeemedAt": "2026-08-14T17:17:09.064Z",
+      "actorUserId": "user-leo"
+    },
+    {
+      "id": "redeem-8fdce42b-e64a-40a4-84a2-41afe5521a6e",
+      "childId": "leo-1",
+      "rewardId": "theme-sky",
+      "name": "Sky Theme",
+      "cost": 120,
+      "redeemedAt": "2026-08-14T17:17:10.517Z",
+      "actorUserId": "user-leo"
+    }
+  ],
+  "events": [
+    {
+      "id": "event-3423a8e8-a2e0-4c9c-85c5-a4389f55c63a",
+      "userId": "user-leo",
+      "childId": "leo-1",
+      "type": "REWARD_REDEEMED",
+      "metadata": {
+        "name": "Sky Theme",
+        "cost": 120
+      },
+      "createdAt": "2026-08-14T17:17:10.517Z"
+    },
+    {
+      "id": "event-7364f71d-fe75-4b93-bbcc-8c285e0b5fb4",
+      "userId": "user-leo",
+      "childId": "leo-1",
+      "type": "REWARD_REDEEMED",
+      "metadata": {
+        "name": "Focus Builder Badge",
+        "cost": 80
+      },
+      "createdAt": "2026-08-14T17:17:09.064Z"
+    },
+    {
+      "id": "event-4d61d02c-1a5a-4679-881f-7f7c9a207ba1",
+      "userId": "user-leo",
+      "childId": "leo-1",
+      "type": "REWARD_REDEEMED",
+      "metadata": {
+        "name": "Focus Builder Badge",
+        "cost": 80
+      },
+      "createdAt": "2026-08-14T17:17:08.247Z"
+    },
+    {
+      "id": "event-79f98235-4d29-41f1-9a8a-065a08e28d13",
+      "userId": "user-leo",
+      "childId": "leo-1",
+      "type": "ROUTINE_RECORDED",
+      "metadata": {
+        "completedSteps": 1,
+        "totalSteps": 3
+      },
+      "createdAt": "2026-08-14T17:17:05.655Z"
+    },
+    {
+      "id": "event-763d6853-9860-4123-8d40-40a67ee33cdd",
+      "userId": "user-leo",
+      "childId": "leo-1",
+      "type": "ROUTINE_RECORDED",
+      "metadata": {
+        "completedSteps": 3,
+        "totalSteps": 3
+      },
+      "createdAt": "2026-08-14T16:28:42.727Z"
+    },
+    {
+      "id": "event-c84f0318-5da1-431a-ba9b-36f94da8a4f4",
+      "userId": "user-leo",
+      "childId": "leo-1",
+      "type": "MOOD_CHECKIN",
+      "metadata": {
+        "mood": "tired"
+      },
+      "createdAt": "2026-08-14T16:00:16.239Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "audit-5dbe43ff-3f1b-4ca7-a472-d3c1167965ef",
+      "userId": "user-leo",
+      "action": "SIGNED_IN",
+      "metadata": {},
+      "createdAt": "2026-08-14T17:16:10.378Z"
+    },
+    {
+      "id": "audit-8a0bbc7f-1529-458f-ae96-b3ed26629785",
+      "userId": "user-leo",
+      "action": "SIGNED_IN",
+      "metadata": {},
+      "createdAt": "2026-08-14T16:00:06.930Z"
+    }
+  ]
+}

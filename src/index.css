@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-primary: #ff9600;
+  --color-primary-dark: #e68500;
+  --color-primary-container: #ffebd0;
+  --color-on-primary-container: #e68500;
+  
+  --color-secondary: #1cb0f6;
+  --color-secondary-dark: #1899d6;
+  --color-secondary-container: #ddf4ff;
+  --color-on-secondary-container: #1899d6;
+  
+  --color-tertiary: #58cc02;
+  --color-tertiary-dark: #46a302;
+  --color-tertiary-container: #d7ffb1;
+  --color-on-tertiary-container: #3c8500;
+  
+  --color-accent: #ffc800;
+  --color-accent-dark: #e6b400;
+  --color-accent-container: #fff8d4;
+  
+  --color-background: #f7f9fa;
+  --color-surface: #ffffff;
+  --color-on-surface: #3c3c3c;
+  --color-on-surface-variant: #777777;
+  --color-surface-variant: #e5e5e5;
+  --color-error: #ff4b4b;
+  --color-error-container: #ffdfe0;
+  --color-on-error-container: #ea2b2b;
+
+  --shadow-ambient: 0 4px 0px rgba(0, 0, 0, 0.06);
+  --shadow-ambient-lg: 0 8px 0px rgba(0, 0, 0, 0.05);
+  --shadow-ambient-primary: 0 4px 0px #e68500;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-background text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container;
+  }
+}
+
+@layer utilities {
+  .btn-primary {
+    @apply bg-primary text-white border-b-4 border-primary-dark rounded-2xl py-3 px-6 font-extrabold text-sm uppercase tracking-wide transition-all active:translate-y-[2px] active:border-b-2 cursor-pointer text-center inline-flex items-center justify-center gap-2 hover:brightness-105;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-white border-b-4 border-secondary-dark rounded-2xl py-3 px-6 font-extrabold text-sm uppercase tracking-wide transition-all active:translate-y-[2px] active:border-b-2 cursor-pointer text-center inline-flex items-center justify-center gap-2 hover:brightness-105;
+  }
+  
+  .btn-tertiary {
+    @apply bg-tertiary text-white border-b-4 border-tertiary-dark rounded-2xl py-3 px-6 font-extrabold text-sm uppercase tracking-wide transition-all active:translate-y-[2px] active:border-b-2 cursor-pointer text-center inline-flex items-center justify-center gap-2 hover:brightness-105;
+  }
+
+  .btn-outline {
+    @apply bg-white text-on-surface border-2 border-surface-variant border-b-4 rounded-2xl py-3 px-6 font-extrabold text-sm uppercase tracking-wide transition-all active:translate-y-[2px] active:border-b-2 cursor-pointer text-center inline-flex items-center justify-center gap-2 hover:bg-neutral-50;
+  }
+  
+  .card-pillowy {
+    @apply bg-white rounded-3xl p-6 border-2 border-surface-variant shadow-ambient transition-all hover:scale-[1.01] hover:border-surface-variant/80;
+  }
+  
+  .card-pillowy-green {
+    @apply bg-primary-container/20 rounded-3xl p-6 border-2 border-primary-dark/20 shadow-ambient;
+  }
+
+  .card-pillowy-blue {
+    @apply bg-secondary-container/30 rounded-3xl p-6 border-2 border-secondary-dark/20 shadow-ambient;
+  }
+
+  .card-pillowy-orange {
+    @apply bg-tertiary-container/30 rounded-3xl p-6 border-2 border-tertiary-dark/20 shadow-ambient;
+  }
+}
+
+/* HEBAT 2.0 accessibility refinements — keep the existing visual language. */
+@layer base {
+  html { font-size: 16px; }
+  button, input, textarea, select { font: inherit; }
+  :focus-visible {
+    outline: 3px solid rgba(28, 176, 246, 0.45);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer utilities {
+  .auth-label {
+    @apply text-[11px] font-black uppercase tracking-[0.16em] text-neutral-500;
+  }
+  .auth-input {
+    @apply w-full bg-white border-2 border-surface-variant rounded-2xl px-4 py-3.5 text-base font-bold outline-none transition-all focus:border-primary placeholder:text-neutral-300;
+  }
+}
