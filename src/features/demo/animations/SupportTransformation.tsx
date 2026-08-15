@@ -1,0 +1,3 @@
+import {motion,useReducedMotion}from'motion/react';
+const rows=[['12 questions','Step 1 · 4  /  Step 2 · 4  /  Step 3 · 4'],['Long focus session · 10 min','Focus Sprint · 5 min'],['3 instructions together','One instruction at a time'],['Unexpected transition','Visual countdown · 3 → 2 → 1']];
+export default function SupportTransformation(){const reduced=useReducedMotion();return <div className="transform-list">{rows.map(([before,after],i)=><motion.div className="transform-row" key={before} initial={{opacity:0,y:reduced?0:12}} animate={{opacity:1,y:0}} transition={{delay:i*.13}}><span>{before}</span><i aria-hidden="true">→</i><strong>{after}</strong></motion.div>)}</div>}
