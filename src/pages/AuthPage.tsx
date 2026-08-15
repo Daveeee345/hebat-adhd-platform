@@ -1,91 +1,34 @@
-import { useState, type FormEvent, type ReactNode } from 'react';
-import { Eye, EyeOff, Globe, LockKeyhole, Mail, ShieldCheck, Smile, UserRound } from 'lucide-react';
+import { useState, type FormEvent } from 'react';
+import { ArrowLeft, ArrowRight, Eye, EyeOff, Globe, GraduationCap, HeartHandshake, LockKeyhole, Mail, School, Smile, Stethoscope, UserRound } from 'lucide-react';
 import { useAuth } from '../lib/AuthContext';
 import { useLanguage } from '../lib/LanguageContext';
 import { cn } from '../lib/utils';
 
-const demos = [
-  {role:'Student',email:'student@hebat.demo'},
-  {role:'Parent',email:'parent@hebat.demo'},
-  {role:'Teacher',email:'teacher@hebat.demo'},
-  {role:'Professional',email:'professional@hebat.demo'},
+type Role='child'|'parent'|'teacher'|'professional';
+const roles=[
+  {id:'child' as Role,label:'Student',icon:GraduationCap,emoji:'🎒'},
+  {id:'parent' as Role,label:'Parent',icon:HeartHandshake,emoji:'🏡'},
+  {id:'teacher' as Role,label:'Teacher',icon:School,emoji:'📚'},
+  {id:'professional' as Role,label:'Professional',icon:Stethoscope,emoji:'🤝'},
 ];
-
 export default function AuthPage(){
-  const {login,register} = useAuth();
-  const {language,setLanguage} = useLanguage();
-  const isId = language==='id';
-  const [mode,setMode] = useState<'login'|'register'>('login');
-  const [showPassword,setShowPassword] = useState(false);
-  const [busy,setBusy] = useState(false);
-  const [error,setError] = useState('');
-  const [form,setForm] = useState({name:'',email:'',password:'',role:'child',childName:'',age:'9',grade:'Grade 4',school:''});
-
-  async function submit(e:FormEvent){
-    e.preventDefault(); setBusy(true); setError('');
-    try{
-      if(mode==='login') await login(form.email,form.password);
-      else await register({
-        name:form.name,email:form.email,password:form.password,role:form.role,
-        child: form.role==='child' ? {age:Number(form.age),grade:form.grade,school:form.school} : form.childName.trim() ? {name:form.childName,age:Number(form.age),grade:form.grade,school:form.school} : undefined
-      });
-    }catch(e:any){setError(e.message||'Unable to continue.');}
-    finally{setBusy(false);}
-  }
-
-  async function demo(email:string){
-    setBusy(true);setError('');setForm(f=>({...f,email,password:'Demo123!'}));
-    try{await login(email,'Demo123!');}catch(e:any){setError(e.message||'Unable to sign in.');}finally{setBusy(false);}
-  }
-
-  return <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8">
-    <div className="w-full max-w-5xl grid lg:grid-cols-[0.9fr_1.1fr] gap-6 items-stretch">
-      <section className="hidden lg:flex flex-col justify-between rounded-[32px] bg-primary text-white p-9 border-b-8 border-primary-dark min-h-[650px]">
-        <div>
-          <div className="w-14 h-14 rounded-2xl bg-white/20 border-2 border-white/25 flex items-center justify-center"><Smile className="w-8 h-8"/></div>
-          <h1 className="text-5xl font-black tracking-tight mt-7">HEBAT</h1>
-          <p className="text-xl font-extrabold mt-3 leading-snug max-w-sm">{isId?'Satu akun, satu riwayat dukungan yang terus berkembang.':'One account, one support history that grows with the child.'}</p>
-        </div>
-        <div className="space-y-4">
-          {[isId?'Progress tersimpan berdasarkan akun':'Progress saved to each account',isId?'Guru, orang tua, siswa, dan profesional terhubung':'Student, parent, teacher, and professional stay connected',isId?'Data tidak lagi bergantung pada browser yang sama':'History no longer depends on the same browser'].map(x=><div key={x} className="flex gap-3 items-start font-bold"><ShieldCheck className="w-5 h-5 mt-0.5 shrink-0"/><span>{x}</span></div>)}
-        </div>
-      </section>
-
-      <section className="bg-white rounded-[32px] border-2 border-surface-variant shadow-ambient-lg p-5 sm:p-8 md:p-10">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 lg:hidden"><div className="w-11 h-11 rounded-2xl bg-primary text-white flex items-center justify-center border-b-4 border-primary-dark"><Smile className="w-6 h-6"/></div><div className="text-2xl font-black text-primary">HEBAT</div></div>
-          <div className="hidden lg:block"><div className="text-[11px] uppercase tracking-[0.2em] font-black text-neutral-400">HEBAT Account</div><div className="text-3xl font-black mt-1">{mode==='login'?(isId?'Selamat datang kembali':'Welcome back'):(isId?'Buat akun HEBAT':'Create your HEBAT account')}</div></div>
-          <button onClick={()=>setLanguage(isId?'en':'id')} className="btn-outline !py-2 !px-3 text-xs"><Globe className="w-4 h-4"/>{language.toUpperCase()}</button>
-        </div>
-        <div className="lg:hidden mt-5"><h1 className="text-3xl font-black">{mode==='login'?(isId?'Selamat datang kembali':'Welcome back'):(isId?'Buat akun HEBAT':'Create your HEBAT account')}</h1></div>
-
-        <div className="grid grid-cols-2 bg-neutral-100 p-1.5 rounded-2xl mt-7">
-          <button onClick={()=>{setMode('login');setError('')}} className={cn('py-3 rounded-xl font-black text-sm cursor-pointer',mode==='login'?'bg-white border-2 border-surface-variant shadow-sm':'text-neutral-500')}>{isId?'Masuk':'Sign in'}</button>
-          <button onClick={()=>{setMode('register');setError('')}} className={cn('py-3 rounded-xl font-black text-sm cursor-pointer',mode==='register'?'bg-white border-2 border-surface-variant shadow-sm':'text-neutral-500')}>{isId?'Daftar':'Create account'}</button>
-        </div>
-
-        <form onSubmit={submit} className="space-y-4 mt-6">
-          {mode==='register' && <Field icon={<UserRound/>} label={isId?'Nama akun':'Your name'}><input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder={isId?'Nama lengkap':'Full name'} className="auth-input" required/></Field>}
-          <Field icon={<Mail/>} label="Email"><input type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="name@example.com" className="auth-input" required/></Field>
-          <Field icon={<LockKeyhole/>} label={isId?'Kata sandi':'Password'}>
-            <div className="relative"><input type={showPassword?'text':'password'} value={form.password} onChange={e=>setForm({...form,password:e.target.value})} placeholder={mode==='register'?(isId?'Minimal 8 karakter + angka':'At least 8 characters + a number'):'••••••••'} className="auth-input !pr-12" required/><button type="button" onClick={()=>setShowPassword(v=>!v)} className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 cursor-pointer">{showPassword?<EyeOff className="w-5 h-5"/>:<Eye className="w-5 h-5"/>}</button></div>
-          </Field>
-
-          {mode==='register' && <>
-            <div><label className="auth-label">{isId?'Jenis akun':'Account role'}</label><div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">{[['child',isId?'Siswa':'Student'],['parent',isId?'Orang Tua':'Parent'],['teacher',isId?'Guru':'Teacher'],['professional',isId?'Profesional':'Professional']].map(([v,l])=><button type="button" key={v} onClick={()=>setForm({...form,role:v})} className={cn('rounded-xl border-2 px-3 py-3 text-xs font-black cursor-pointer',form.role===v?'bg-primary text-white border-primary-dark':'bg-white border-surface-variant text-neutral-600')}>{l}</button>)}</div></div>
-            {form.role!=='child' && form.role!=='professional' && <Field icon={<UserRound/>} label={isId?'Profil anak pertama (opsional)':'First child profile (optional)'}><input value={form.childName} onChange={e=>setForm({...form,childName:e.target.value})} placeholder={form.role==='parent'?(isId?'Nama anak':'Child name'):form.role==='teacher'?(isId?'Nama siswa pertama':'First student name'):(isId?'Nama kasus demo':'Demo case name')} className="auth-input"/></Field>}
-            {form.role==='professional' && <div className="rounded-2xl bg-secondary-container/20 border border-secondary/20 p-4 text-sm font-bold text-neutral-600">{isId?'Akun profesional terhubung ke kasus melalui kode profil yang sudah memiliki persetujuan rujukan.':'Professional accounts connect to cases through a child code that already has referral consent.'}</div>}
-            {(form.role==='child'||(form.role!=='professional'&&form.childName.trim())) && <div className="grid sm:grid-cols-3 gap-3"><input type="number" min="4" max="17" value={form.age} onChange={e=>setForm({...form,age:e.target.value})} className="auth-input" placeholder="Age"/><input value={form.grade} onChange={e=>setForm({...form,grade:e.target.value})} className="auth-input" placeholder="Grade 4"/><input value={form.school} onChange={e=>setForm({...form,school:e.target.value})} className="auth-input" placeholder={isId?'Sekolah':'School'}/></div>}
-          </>}
-
-          {error && <div className="rounded-2xl bg-error-container text-on-error-container border-2 border-error/20 p-4 text-sm font-extrabold">{error}</div>}
-          <button disabled={busy} className="btn-primary w-full !py-4 text-sm disabled:opacity-60">{busy?(isId?'Memproses...':'Please wait...'):mode==='login'?(isId?'Masuk ke HEBAT':'Sign in to HEBAT'):(isId?'Buat akun':'Create account')}</button>
-        </form>
-
-        {mode==='login' && <div className="mt-7 pt-6 border-t-2 border-surface-variant/70"><div className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">{isId?'Akun demo cepat':'Quick demo accounts'}</div><p className="text-xs font-bold text-neutral-500 mt-1">{isId?'Semua menggunakan password Demo123!':'All demo accounts use password Demo123!'}</p><div className="grid grid-cols-2 gap-2 mt-3">{demos.map(d=><button key={d.email} disabled={busy} onClick={()=>demo(d.email)} className="btn-outline !py-2.5 !px-3 text-[11px] normal-case tracking-normal">{d.role}</button>)}</div></div>}
-      </section>
-    </div>
-  </div>;
+  const {login,register,createDemo}=useAuth(); const {language,setLanguage}=useLanguage(); const isId=language==='id';
+  const [view,setView]=useState<'welcome'|'role'|'profile'|'login'>('welcome'); const [demo,setDemo]=useState(false);
+  const [showPassword,setShowPassword]=useState(false); const [busy,setBusy]=useState(false); const [error,setError]=useState('');
+  const [form,setForm]=useState({role:'child' as Role,name:'',childName:'',age:'9',grade:'Grade 4',school:'',email:'',password:''});
+  const choose=(role:Role)=>{setForm(f=>({...f,role}));setView('profile')};
+  async function finish(e:FormEvent){e.preventDefault();setBusy(true);setError('');try{
+    const child=form.role==='child'?{age:Number(form.age),grade:form.grade,school:form.school}:{name:form.childName,age:Number(form.age),grade:form.grade,school:form.school};
+    if(demo) await createDemo({role:form.role,name:form.name||undefined,child}); else await register({...form,child});
+  }catch(e:any){setError(e.message||'Unable to continue.')}finally{setBusy(false)}}
+  async function signIn(e:FormEvent){e.preventDefault();setBusy(true);setError('');try{await login(form.email,form.password)}catch(e:any){setError(e.message||'Unable to sign in.')}finally{setBusy(false)}}
+  return <main className="min-h-screen bg-background flex items-center justify-center p-4 md:p-8"><section className="w-full max-w-2xl bg-white rounded-[32px] border-2 border-surface-variant shadow-ambient-lg p-5 sm:p-9">
+    <header className="flex items-center justify-between"><div className="flex items-center gap-3"><div className="w-12 h-12 rounded-2xl bg-primary text-white border-b-4 border-primary-dark flex items-center justify-center"><Smile/></div><div><div className="text-2xl font-black text-primary">HEBAT</div><div className="text-[10px] font-black uppercase tracking-widest text-neutral-400">Learning support</div></div></div><button onClick={()=>setLanguage(isId?'en':'id')} className="btn-outline !py-2 !px-3 text-xs"><Globe className="w-4 h-4"/>{language.toUpperCase()}</button></header>
+    {view==='welcome'&&<div className="text-center py-10"><div className="text-6xl">🌟</div><h1 className="text-3xl sm:text-4xl font-black mt-5">{isId?'Mulai dengan HEBAT':'A simpler way to start'}</h1><p className="text-base font-bold text-neutral-500 mt-3">{isId?'Buat ruang dukungan dalam dua langkah singkat.':'Create your support space in two short steps.'}</p><div className="space-y-3 mt-8"><button onClick={()=>{setDemo(true);setView('role')}} className="btn-primary w-full !py-4">Try HEBAT Demo <ArrowRight className="w-5 h-5"/></button><button onClick={()=>{setDemo(false);setView('role')}} className="btn-outline w-full !py-4">Create account</button><button onClick={()=>setView('login')} className="text-sm font-black text-primary mt-3 cursor-pointer">Already have an account? Sign in</button></div></div>}
+    {view==='role'&&<div className="py-7"><StepBack onClick={()=>setView('welcome')}/><div className="text-xs font-black uppercase tracking-widest text-primary mt-6">Step 1 of 2</div><h1 className="text-3xl font-black mt-2">Who are you using HEBAT as?</h1><div className="grid grid-cols-2 gap-3 mt-7">{roles.filter(r=>!demo||r.id!=='professional').map(r=><button key={r.id} onClick={()=>choose(r.id)} className="rounded-3xl border-2 border-b-4 border-surface-variant hover:border-primary bg-white p-5 min-h-36 text-left cursor-pointer focus:outline-none focus:ring-4 focus:ring-primary/20"><span className="text-4xl">{r.emoji}</span><span className="block text-lg font-black mt-3">{r.label}</span><r.icon className="w-4 h-4 text-neutral-400 mt-2"/></button>)}</div></div>}
+    {view==='profile'&&<form onSubmit={finish} className="py-7"><StepBack onClick={()=>setView('role')}/><div className="text-xs font-black uppercase tracking-widest text-primary mt-6">Step 2 of 2</div><h1 className="text-3xl font-black mt-2">Tell us just the basics</h1><div className="space-y-4 mt-7"><label className="auth-label">First name<input className="auth-input mt-2" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} required placeholder="Your first name"/></label>{form.role!=='child'&&form.role!=='professional'&&<label className="auth-label">{form.role==='teacher'?'Student first name':'Child first name'}<input className="auth-input mt-2" value={form.childName} onChange={e=>setForm({...form,childName:e.target.value})} required/></label>}{form.role==='teacher'&&<label className="auth-label">School / Class name<input className="auth-input mt-2" value={form.school} onChange={e=>setForm({...form,school:e.target.value})}/></label>}{form.role!=='professional'&&<div className="grid grid-cols-2 gap-3"><label className="auth-label">{form.role==='child'?'Age':'Child age'}<input type="number" min="4" max="17" className="auth-input mt-2" value={form.age} onChange={e=>setForm({...form,age:e.target.value})} required/></label><label className="auth-label">Grade<input className="auth-input mt-2" value={form.grade} onChange={e=>setForm({...form,grade:e.target.value})} required/></label></div>}{!demo&&<><label className="auth-label">Email<input type="email" className="auth-input mt-2" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} required/></label><label className="auth-label">Password<input type="password" minLength={8} className="auth-input mt-2" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} required placeholder="8+ characters with a number"/></label></>} {error&&<ErrorBox text={error}/>}<button disabled={busy} className="btn-primary w-full !py-4">{busy?'Creating your space…':demo?'Continue as Demo':'Create my account'}<ArrowRight className="w-5 h-5"/></button></div></form>}
+    {view==='login'&&<form onSubmit={signIn} className="py-7"><StepBack onClick={()=>setView('welcome')}/><h1 className="text-3xl font-black mt-7">Welcome back</h1><div className="space-y-4 mt-7"><label className="auth-label flex items-center gap-2"><Mail className="w-4 h-4"/>Email</label><input type="email" className="auth-input" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} required/><label className="auth-label flex items-center gap-2"><LockKeyhole className="w-4 h-4"/>Password</label><div className="relative"><input type={showPassword?'text':'password'} className="auth-input !pr-12" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} required/><button type="button" onClick={()=>setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2">{showPassword?<EyeOff/>:<Eye/>}</button></div>{error&&<ErrorBox text={error}/>}<button disabled={busy} className="btn-primary w-full !py-4">Sign in</button></div></form>}
+  </section></main>
 }
-
-function Field({icon,label,children}:{icon:ReactNode;label:string;children:ReactNode}){return <div><label className="auth-label flex items-center gap-2"><span className="[&>svg]:w-4 [&>svg]:h-4">{icon}</span>{label}</label><div className="mt-2">{children}</div></div>}
+function StepBack({onClick}:{onClick:()=>void}){return <button onClick={onClick} type="button" className="text-sm font-black text-neutral-500 flex gap-2 items-center cursor-pointer"><ArrowLeft className="w-4 h-4"/>Back</button>}
+function ErrorBox({text}:{text:string}){return <div className="rounded-2xl bg-error-container text-on-error-container border-2 border-error/20 p-4 text-sm font-extrabold">{text}</div>}

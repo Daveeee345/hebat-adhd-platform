@@ -232,8 +232,10 @@ export function childComputedState(db: HebatDb, childId: string) {
   const observations = (db.observations || []).filter((x:any) => x.childId === childId).sort((a:any,b:any)=>b.createdAt.localeCompare(a.createdAt));
   const focusSessions = (db.focusSessions || []).filter((x:any) => x.childId === childId).sort((a:any,b:any)=>b.createdAt.localeCompare(a.createdAt));
   const routines = (db.routineSessions || []).filter((x:any) => x.childId === childId).sort((a:any,b:any)=>b.createdAt.localeCompare(a.createdAt));
-  const supportProfile = calculateSupportProfile(observations, focusSessions, routines);
-  const focusMinutes = recommendedFocusMinutes(focusSessions);
+  const screenings=(db.screenings||[]).filter((x:any)=>x.childId===childId).sort((a:any,b:any)=>String(b.completedAt||b.createdAt).localeCompare(String(a.completedAt||a.createdAt)));
+  const supportProfile = calculateSupportProfile(observations, focusSessions, routines, screenings[0]?.supportProfile);
+  const attentionHigh=supportProfile.domains.find((d:any)=>d.key==='attention')?.need==='High';
+  const focusMinutes = attentionHigh ? 5 : recommendedFocusMinutes(focusSessions);
   const supportPlan = buildSupportPlan(supportProfile, focusMinutes, childId, child?.name || 'the child');
 
   const routineRate = routines.slice(0,5).length ? routines.slice(0,5).reduce((a:number,r:any)=>a + (r.totalSteps ? r.completedSteps/r.totalSteps : 0),0)/routines.slice(0,5).length : 0;
@@ -252,11 +254,13 @@ export function childComputedState(db: HebatDb, childId: string) {
   };
 
   const completedIds = new Set((db.missionCompletions || []).filter((x:any)=>x.childId===childId).map((x:any)=>x.missionId));
-  const todayMissions = [
+  const baseMissions = [
     { id:'mission-reading', type:'learning', moduleId:1, title:'Reading Mission', subtitle:'Find the Main Idea', duration:7, stars:25, status: completedIds.has('mission-reading') ? 'completed' : 'ready' },
     { id:'mission-focus', type:'focus', title:'Focus Sprint', subtitle:'Stay with one task', duration:focusMinutes, stars:20, status: completedIds.has('mission-focus') ? 'completed' : 'ready' },
     { id:'mission-memory', type:'learning', moduleId:4, title:'Memory Mission', subtitle:'Remember and follow small steps', duration:5, stars:25, status: completedIds.has('mission-memory') ? 'completed' : 'ready' },
   ];
+  const routinePriority=supportProfile.domains.find((d:any)=>d.key==='routine')?.need==='High';
+  const todayMissions=routinePriority ? [{id:'mission-routine',type:'routine',title:'Routine Builder',subtitle:'One step at a time',duration:4,stars:15,status:'ready'},...baseMissions.slice(0,2)] : baseMissions;
   return { observations, focusSessions, routines, supportProfile, supportPlan, weeklyMetrics, todayMissions };
 }
 
@@ -284,7 +288,7 @@ export function publicSnapshot(db: HebatDb, user: any, childId: string) {
   const rewards = (db.rewardTransactions || []).filter((r:any)=>r.childId===child.id);
   const linkedChildren = linkedChildrenForUser(db,user.id).map((c:any)=>({id:c.id,name:c.name,age:c.age,grade:c.grade,school:c.school,avatar:c.avatar,inviteCode:c.inviteCode}));
   return {
-    account: { id:user.id, name:user.name, email:user.email, role:user.role, profileComplete:user.profileComplete },
+    account: { id:user.id, name:user.name, email:user.email, role:user.role, profileComplete:user.profileComplete, screeningCompleted:user.screeningCompleted, demo:user.demo },
     linkedChildren,
     selectedChildId: child.id,
     child,

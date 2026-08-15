@@ -39,8 +39,14 @@ const average = (values: number[], fallback = 0) => values.length ? values.reduc
 export function calculateSupportProfile(
   observations: ObservationRecord[],
   focusSessions: FocusSessionRecord[],
-  routines: RoutineSessionRecord[]
+  routines: RoutineSessionRecord[],
+  screeningProfile?: {domains?:Array<{key:string;label:string;need:NeedLabel;score?:number}>}
 ) {
+  if(screeningProfile?.domains?.length){
+    const domains=screeningProfile.domains.map(d=>({...d,score:d.score ?? (d.need==='High'?80:d.need==='Moderate'?52:20)}));
+    const priority=[...domains].sort((a,b)=>b.score-a.score)[0];
+    return {domains,priorityKey:priority.key,updatedAt:new Date().toISOString(),dataStatus:'ready' as const};
+  }
   const hasAnyData = observations.length > 0 || focusSessions.length > 0 || routines.length > 0;
   if (!hasAnyData) {
     const domains = [

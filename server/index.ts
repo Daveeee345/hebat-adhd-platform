@@ -102,7 +102,7 @@ app.post('/api/auth/register', (req,res)=>{
   if ((db.users || []).some((u:any)=>normalizeEmail(u.email)===email)) return res.status(409).json({error:'An account with this email already exists.'});
 
   const pass = hashPassword(password);
-  const user = {id:id('user'),email,name,role,passwordSalt:pass.salt,passwordHash:pass.hash,createdAt:nowIso(),profileComplete:true};
+  const user = {id:id('user'),email,name,role,passwordSalt:pass.salt,passwordHash:pass.hash,createdAt:nowIso(),profileComplete:true,screeningCompleted:role==='professional'};
   db.users.push(user);
 
   // For a child account, the account itself becomes the child profile. Other roles can optionally create a first workspace child.
@@ -115,6 +115,24 @@ app.post('/api/auth/register', (req,res)=>{
   audit(db,user,'ACCOUNT_REGISTERED');
   saveDb(db);
   setSessionCookie(res,session.token);
+  res.status(201).json({user:publicUser(user),linkedChildren:linkedChildrenForUser(db,user.id)});
+});
+
+// Every click creates an isolated account and child workspace; no shared demo history.
+app.post('/api/auth/demo', (req,res)=>{
+  const db=loadDb();
+  const role=String(req.body.role||'child');
+  if(!['child','parent','teacher'].includes(role)) return res.status(400).json({error:'Select Student, Parent, or Teacher.'});
+  const suffix=crypto.randomBytes(6).toString('hex');
+  const name=String(req.body.name||({child:'Demo Student',parent:'Demo Parent',teacher:'Demo Teacher'} as any)[role]).trim();
+  const pass=hashPassword(crypto.randomBytes(18).toString('hex'));
+  const user={id:id('demo-user'),email:`${role}-${suffix}@prototype.hebat.demo`,name,role,passwordSalt:pass.salt,passwordHash:pass.hash,createdAt:nowIso(),profileComplete:true,screeningCompleted:false,demo:true};
+  db.users.push(user);
+  const childInput=req.body.child||{};
+  createChildForUser(db,user,{name:role==='child'?name:String(childInput.name||'Demo Child'),age:childInput.age||9,grade:childInput.grade||'Grade 4',school:childInput.school||''});
+  const session=newSessionToken();
+  db.sessions.push({id:id('session'),userId:user.id,tokenHash:session.tokenHash,createdAt:nowIso(),lastSeenAt:nowIso(),expiresAt:sessionExpiryIso()});
+  audit(db,user,'ISOLATED_DEMO_CREATED'); saveDb(db); setSessionCookie(res,session.token);
   res.status(201).json({user:publicUser(user),linkedChildren:linkedChildrenForUser(db,user.id)});
 });
 
@@ -216,9 +234,12 @@ app.post('/api/routine-sessions', authenticate, resolveChild, (req:AuthRequest,r
 });
 
 app.post('/api/screenings', authenticate, resolveChild, (req:AuthRequest,res)=>{
-  if (!['parent','teacher'].includes(req.user.role)) return res.status(403).json({error:'Only parent and teacher accounts can save this screening.'});
+  if (!['child','parent','teacher'].includes(req.user.role)) return res.status(403).json({error:'This account cannot save a check-in.'});
   const db = loadDb(); db.screenings ||= [];
-  db.screenings.unshift({ id:id('screen'), childId:req.childId, actorUserId:req.user.id, respondentRole:req.user.role, respondentName:req.user.name, createdAt:nowIso(), ...req.body });
+  const completedAt=nowIso();
+  db.screenings.unshift({ id:id('screen'), childId:req.childId, userId:req.user.id, actorUserId:req.user.id, respondentRole:req.user.role, respondentName:req.user.name, startedAt:req.body.startedAt||completedAt, completedAt, createdAt:completedAt, profileVersion:'support-profile-1.0', ...req.body });
+  const storedUser=db.users.find((u:any)=>u.id===req.user.id); if(storedUser) storedUser.screeningCompleted=true;
+  if(req.user.role==='child') db.rewardTransactions.unshift({id:id('reward'),childId:req.childId,actorUserId:req.user.id,createdAt:completedAt,amount:20,reason:'Support Profile check-in completed'});
   addEvent(db,req.user,req.childId!,'SCREENING_SAVED'); audit(db,req.user,'SCREENING_SAVED',req.childId);
   const next=saveDb(db); res.json(publicSnapshot(next,req.user,req.childId!));
 });
