@@ -19,6 +19,7 @@ export default function ChildDashboard({ setPage }:{ setPage:(p:Page)=>void }) {
 
   const openMission=(mission:any)=>{
     if(mission.type==='focus') return setPage('focus-timer');
+    if(mission.type==='routine') return setPage('routine-builder');
     if(mission.moduleId){
       localStorage.setItem('child_active_module_jump',String(mission.moduleId));
       localStorage.setItem('hebat_active_mission_id',mission.id);

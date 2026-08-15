@@ -8,6 +8,7 @@ type AuthContextValue = {
   error: string | null;
   login: (email:string,password:string)=>Promise<void>;
   register: (payload:any)=>Promise<void>;
+  createDemo: (payload:any)=>Promise<void>;
   logout: ()=>Promise<void>;
   refreshMe: ()=>Promise<void>;
   createChild: (payload:any)=>Promise<void>;
@@ -39,6 +40,7 @@ export function AuthProvider({children}:{children:ReactNode}) {
     user, linkedChildren, loading, error,
     login: async(email,password)=>{ setError(null); const result=await authApi.login(email,password); apply(result); },
     register: async(payload)=>{ setError(null); const result=await authApi.register(payload); apply(result); },
+    createDemo: async(payload)=>{ setError(null); const result=await authApi.demo(payload); apply(result); },
     logout: async()=>{ try{await authApi.logout();}finally{setUser(null);setLinkedChildren([]);} },
     refreshMe,
     createChild: async(payload)=>{ const result=await authApi.createChild(payload); setLinkedChildren(result.linkedChildren||[]); },

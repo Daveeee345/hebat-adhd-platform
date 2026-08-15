@@ -47,6 +47,9 @@ export default function App() {
   if(authLoading) return <div className="min-h-screen bg-background flex items-center justify-center"><div className="text-center"><div className="w-16 h-16 rounded-3xl bg-primary text-white border-b-4 border-primary-dark flex items-center justify-center mx-auto text-2xl font-black">H</div><div className="text-2xl font-black text-primary mt-4">HEBAT</div><div className="text-sm font-bold text-neutral-400 mt-1">Loading your workspace…</div></div></div>;
   if(!user) return <AuthPage/>;
   if(!linkedChildren.length) return <NoLinkedChild/>;
+  const screeningLater=sessionStorage.getItem(`hebat_screening_later_${user.id}`)==='1';
+  if(user.role!=='professional'&&!user.screeningCompleted&&!screeningLater&&currentPage!=='screening-quiz'&&currentPage!=='screening-results') return <Screening step="screening-intro" setPage={setCurrentPage}/>;
+  if(currentPage==='screening-quiz'||currentPage==='screening-results') return <Screening step={currentPage} setPage={setCurrentPage}/>;
 
   const renderPage=()=>{
     switch(currentPage){
@@ -61,7 +64,7 @@ export default function App() {
       case 'rewards': return <Rewards/>;
       case 'routine-builder': return <RoutineBuilder role={role==='child'?'child':'parent'}/>;
       case 'pmt-modules': return <PMTModules/>;
-      case 'screening-intro': case 'screening-quiz': case 'screening-results': return <Screening step={currentPage} setPage={setCurrentPage}/>;
+      case 'screening-intro': return <Screening step={currentPage} setPage={setCurrentPage}/>;
       case 'consultation': return <Consultation/>;
       case 'account-history': return <AccountHistory/>;
       default:return role==='parent'?<ParentDashboard setPage={setCurrentPage}/>:role==='teacher'?<TeacherDashboard setPage={setCurrentPage}/>:role==='professional'?<ProfessionalDashboard setPage={setCurrentPage}/>:<ChildDashboard setPage={setCurrentPage}/>;

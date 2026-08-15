@@ -1,6 +1,6 @@
 export type NeedLevel = 'Low' | 'Moderate' | 'High';
 export type AccountRole = 'child' | 'parent' | 'teacher' | 'professional';
-export interface AuthUser { id:string; name:string; email:string; role:AccountRole; profileComplete?:boolean }
+export interface AuthUser { id:string; name:string; email:string; role:AccountRole; profileComplete?:boolean; screeningCompleted?:boolean; demo?:boolean }
 export interface LinkedChild { id:string; name:string; age:number; grade:string; school:string; avatar?:string; inviteCode?:string }
 
 export interface HebatSnapshot {
@@ -46,6 +46,7 @@ export const authApi = {
   me: () => request<{user:AuthUser;linkedChildren:LinkedChild[]}>('/api/auth/me'),
   login: (email:string,password:string) => request<{user:AuthUser;linkedChildren:LinkedChild[]}>('/api/auth/login',{method:'POST',body:JSON.stringify({email,password})}),
   register: (payload:any) => request<{user:AuthUser;linkedChildren:LinkedChild[]}>('/api/auth/register',{method:'POST',body:JSON.stringify(payload)}),
+  demo: (payload:any) => request<{user:AuthUser;linkedChildren:LinkedChild[]}>('/api/auth/demo',{method:'POST',body:JSON.stringify(payload)}),
   logout: () => request<{ok:boolean}>('/api/auth/logout',{method:'POST'}),
   createChild: (payload:any) => request<{child:LinkedChild;linkedChildren:LinkedChild[]}>('/api/account/children',{method:'POST',body:JSON.stringify(payload)}),
   linkChild: (code:string) => request<{child:LinkedChild;linkedChildren:LinkedChild[]}>('/api/account/link-child',{method:'POST',body:JSON.stringify({code})}),
