@@ -5,15 +5,16 @@ import './index.css';
 import { LanguageProvider } from './lib/LanguageContext.tsx';
 import { HebatDataProvider } from './lib/HebatDataContext.tsx';
 import { AuthProvider } from './lib/AuthContext.tsx';
+import JuryDemo from './features/demo/JuryDemo.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LanguageProvider>
+    {window.location.pathname === '/demo' ? <JuryDemo /> : <LanguageProvider>
       <AuthProvider>
         <HebatDataProvider>
           <App />
         </HebatDataProvider>
       </AuthProvider>
-    </LanguageProvider>
+    </LanguageProvider>}
   </StrictMode>,
 );
