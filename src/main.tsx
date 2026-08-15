@@ -6,10 +6,11 @@ import { LanguageProvider } from './lib/LanguageContext.tsx';
 import { HebatDataProvider } from './lib/HebatDataContext.tsx';
 import { AuthProvider } from './lib/AuthContext.tsx';
 import JuryDemo from './features/demo/JuryDemo.tsx';
+import { DemoProvider } from './features/demo/DemoContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {window.location.pathname === '/demo' ? <JuryDemo /> : <LanguageProvider>
+    {window.location.pathname === '/demo' ? <DemoProvider><JuryDemo /></DemoProvider> : <LanguageProvider>
       <AuthProvider>
         <HebatDataProvider>
           <App />
